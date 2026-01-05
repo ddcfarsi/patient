@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اتاق درمان - مراجع</title>
+    <title>دیپارتمنت روانشناسی افغانستان - مراجع</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
     <!-- فرم ورود -->
     <div id="intakeForm" class="absolute inset-0 bg-slate-900 p-4 flex flex-col justify-center items-center z-50">
         <div class="bg-slate-800 p-6 rounded-2xl w-full max-w-sm text-center">
-            <h2 class="text-2xl font-bold mb-4 text-emerald-400">اتاق درمان</h2>
+            <h2 class="text-2xl font-bold mb-4 text-emerald-400">دیپارتمنت روانشناسی افغانستان</h2>
             <input type="text" id="pName" placeholder="نام خود را وارد کنید" class="w-full bg-slate-700 text-white p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-emerald-500">
             <button onclick="patientSubmit()" class="w-full bg-emerald-600 text-white p-3 rounded font-bold">ورود به جلسه</button>
         </div>
@@ -31,7 +31,7 @@
         <div class="h-12 bg-slate-900/90 flex justify-center items-center z-20"><span class="text-sm text-slate-400">اتصال با دکتر</span></div>
 
         <div class="flex-1 relative bg-black">
-            <!-- تب ویدیو -->
+            <!-- ویدیو -->
             <div id="tabVideo" class="absolute inset-0">
                 <video id="remoteVideo" autoplay playsinline class="w-full h-full object-contain"></video>
                 <div class="absolute top-4 right-4 w-24 h-32 bg-black rounded-lg border border-slate-600 overflow-hidden">
@@ -55,7 +55,7 @@
                 </div>
             </div>
 
-            <!-- تب تخته (وایت‌بورد) -->
+            <!-- تخته -->
             <div id="tabWhiteboard" class="hidden absolute inset-0 bg-white">
                 <div class="h-12 bg-slate-100 flex items-center justify-center border-b"><span class="text-slate-500 text-xs">تخته آموزشی دکتر</span></div>
                 <canvas id="whiteboard" class="w-full h-full"></canvas>
@@ -67,7 +67,7 @@
                 </div>
             </div>
 
-            <!-- تب آموزش (جدید) -->
+            <!-- تب آموزش -->
             <div id="tabEducation" class="hidden absolute inset-0 bg-slate-900 flex flex-col p-4 overflow-y-auto">
                 <div class="bg-slate-800 rounded-2xl p-6 border border-emerald-500/30 mb-4">
                     <h2 class="text-2xl font-bold text-emerald-400 mb-2" id="eduTitle">...</h2>
@@ -76,6 +76,14 @@
                 <button onclick="copyEducation()" class="w-full bg-slate-700 text-white py-4 rounded-xl font-bold border border-slate-600 flex items-center justify-center gap-2">
                     <i class="fa-regular fa-copy"></i> کپی متن برای ذخیره
                 </button>
+            </div>
+
+            <!-- تب فیلم (جديد) -->
+            <div id="tabVideoPlayer" class="hidden absolute inset-0 bg-black flex flex-col p-4">
+                <div class="flex-1 bg-slate-900 rounded-xl border border-slate-700 flex items-center justify-center relative overflow-hidden">
+                    <iframe id="patientVideoFrame" class="w-full h-full" frameborder="0" allowfullscreen></iframe>
+                </div>
+                <p class="text-center text-slate-400 mt-2 text-sm">ویدیوی ارسالی توسط دکتر</p>
             </div>
 
             <div id="breathOverlay" class="breath-circle flex items-center justify-center">
@@ -104,10 +112,7 @@
                 peer = new Peer();
                 peer.on('open', () => {
                     conn = peer.connect(docId);
-                    
-                    // --- اصلاح مهم: فعال کردن شنونده داده ---
                     conn.on('data', handleData);
-
                     conn.on('open', () => {
                         conn.send({ type: 'intake', name: name || 'بیمار' });
                         call = peer.call(docId, localStream);
@@ -125,6 +130,9 @@
                 document.getElementById('eduTitle').innerText = data.title;
                 document.getElementById('eduContent').innerText = data.content;
                 executeCmd('education');
+            } else if (data.type === 'video') {
+                document.getElementById('patientVideoFrame').src = data.url;
+                executeCmd('videoPlayer');
             }
         }
 
@@ -141,15 +149,16 @@
             document.getElementById('tabVideo').classList.add('hidden');
             document.getElementById('tabWhiteboard').classList.add('hidden');
             document.getElementById('tabEducation').classList.add('hidden');
+            document.getElementById('tabVideoPlayer').classList.add('hidden');
             document.getElementById('breathOverlay').style.display = 'none';
 
             if(action === 'video') document.getElementById('tabVideo').classList.remove('hidden');
             if(action === 'whiteboard') {
                 document.getElementById('tabWhiteboard').classList.remove('hidden');
-                // --- اصلاح مهم: تنظیم مجدد سایز تخته وقتی باز می‌شود ---
-                setTimeout(resizeCanvas, 50);
+                setTimeout(resizeCanvas, 50); // تاخیر برای لود شدن درست
             }
             if(action === 'education') document.getElementById('tabEducation').classList.remove('hidden');
+            if(action === 'videoPlayer') document.getElementById('tabVideoPlayer').classList.remove('hidden');
             if(action === 'breath') document.getElementById('breathOverlay').style.display = 'flex';
         }
 
