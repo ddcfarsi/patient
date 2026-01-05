@@ -2,212 +2,179 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>دیپارتمنت روانشناسی - اتصال مراجع</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اتاق درمان - مراجع</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/peerjs@1.5.1/dist/peerjs.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
-    
-    <style>
-        body { font-family: 'Vazirmatn', sans-serif; background-color: #f1f5f9; overflow: hidden; }
-        .breath-circle {
-            width: 180px; height: 180px; background: rgba(34, 197, 94, 0.15); border: 4px solid rgba(34, 197, 94, 0.3); border-radius: 50%;
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            animation: breathe 10s infinite ease-in-out; display: none; z-index: 60; pointer-events: none;
-            box-shadow: 0 0 50px rgba(34, 197, 94, 0.2);
-        }
-        @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; } 50% { transform: translate(-50%, -50%) scale(2.5); opacity: 0.1; } }
-        #whiteboard { background: #fff; cursor: crosshair; touch-action: none; box-shadow: inset 0 0 30px rgba(0,0,0,0.05); }
-        .color-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #e2e8f0; cursor: pointer; transition: transform 0.2s; }
-        .color-btn.active { border-color: #0f172a; transform: scale(1.2); }
-        .tab-btn { border-bottom: 3px solid transparent; color: #64748b; transition: 0.3s; font-weight: 600; font-size: 0.95rem; }
-        .tab-btn.active { border-color: #0f172a; color: #0f172a; background: #f8fafc; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Vazirmatn', sans-serif; background: #111; color: white; overflow: hidden; }
+    .breath-circle { width: 90vw; height: 90vw; max-width: 400px; max-height: 400px; background: rgba(34, 197, 94, 0.15); border: 4px solid #22c55e; border-radius: 50%; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); animation: breathe 8s infinite ease-in-out; display: none; z-index: 100; pointer-events: none; box-shadow: 0 0 60px rgba(34,197,94,0.2); }
+    @keyframes breathe { 0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; } 50% { transform: translate(-50%, -50%) scale(2.5); opacity: 0.1; } }
+    #whiteboard { background: #fff; cursor: crosshair; touch-action: none; } 
+    .emotion-btn { font-size: 1.5rem; transition: transform 0.2s; } .emotion-btn:active { transform: scale(1.5); }
+    input[type=range] { direction: ltr; }</style>
 </head>
-<body class="h-screen w-screen text-slate-800">
+<body class="h-screen w-screen flex flex-col">
 
-    <!-- فرم ورود بیمار -->
-    <div id="intakeForm" class="absolute inset-0 z-40 bg-white flex flex-col items-center justify-center p-4">
-        <div class="w-full max-w-sm space-y-4 animate-fade-in">
-            <div class="text-center mb-4">
-                <div class="bg-emerald-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto text-emerald-600 text-2xl mb-2">
-                    <i class="fa-solid fa-user-check"></i>
-                </div>
-                <h2 class="text-2xl font-bold text-slate-800">اتاق درمان</h2>
-                <p class="text-slate-500 text-sm">برای شروع لطفا مشخصات خود را وارد کنید</p>
-            </div>
-            
-            <input type="text" id="pName" placeholder="نام و نام خانوادگی" class="w-full p-4 bg-slate-100 rounded-xl border-none focus:ring-2 focus:ring-emerald-500 outline-none text-lg">
-            <select id="pReason" class="w-full p-4 bg-slate-100 rounded-xl border-none focus:ring-2 focus:ring-emerald-500 outline-none text-slate-600 text-lg">
-                <option value="">علت مراجعه...</option>
-                <option value="PTSD">استرس پس از سانحه (PTSD)</option>
-                <option value="اضطراب">اضطراب و نگرانی</option>
-                <option value="افسردگی">افسردگی</option>
-                <option value="فشار">فشارهای اجتماعی/خانوادگی</option>
-                <option value="سایر">سایر موارد</option>
-            </select>
-            <button onclick="patientSubmit()" class="w-full bg-emerald-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-emerald-200">ورود به جلسه</button>
-            <button onclick="location.reload()" class="w-full text-slate-400 text-sm mt-2">انصراف</button>
+    <!-- فرم ورود -->
+    <div id="intakeForm" class="absolute inset-0 bg-slate-900 p-4 flex flex-col justify-center items-center z-50">
+        <div class="bg-slate-800 p-6 rounded-2xl w-full max-w-sm text-center">
+            <h2 class="text-2xl font-bold mb-4 text-emerald-400">اتاق درمان</h2>
+            <input type="text" id="pName" placeholder="نام خود را وارد کنید" class="w-full bg-slate-700 text-white p-3 rounded mb-4 outline-none focus:ring-2 focus:ring-emerald-500">
+            <button onclick="patientSubmit()" class="w-full bg-emerald-600 text-white p-3 rounded font-bold">ورود به جلسه</button>
         </div>
     </div>
 
-    <!-- محیط جلسه بیمار (بدون یادداشت) -->
-    <div id="mainSession" class="hidden absolute inset-0 z-30 bg-slate-900 flex flex-col h-screen">
-        <header class="h-16 bg-slate-900 border-b border-slate-800 flex justify-between items-center px-4 md:px-6 text-white z-50">
-            <div class="flex items-center gap-3">
-                <i class="fa-solid fa-brain text-emerald-500 text-lg"></i>
-                <span class="font-bold md:text-lg">جلسه درمانی</span>
-                <span id="sessionTimer" class="bg-slate-800 px-3 py-1 rounded text-xs md:text-sm font-mono text-slate-300">00:00</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <div class="flex items-center gap-2 bg-slate-800 px-2 md:px-3 py-1.5 rounded-full border border-slate-700">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <span class="text-[10px] md:text-xs text-slate-300">متصل به دکتر</span>
+    <!-- محیط جلسه -->
+    <div id="mainSession" class="hidden flex-1 flex flex-col relative h-full">
+        
+        <!-- هدر ساده -->
+        <div class="h-12 bg-slate-900/90 flex justify-center items-center z-20"><span class="text-sm text-slate-400">اتصال با دکتر</span></div>
+
+        <!-- محتوا -->
+        <div class="flex-1 relative bg-black">
+            
+            <!-- ویدیوی دکتر (مراجع دکتر را می‌بیند) -->
+            <div id="tabVideo" class="absolute inset-0">
+                <video id="remoteVideo" autoplay playsinline class="w-full h-full object-contain"></video>
+                <!-- ویدیوی خود مراجع (کوچک شناور) -->
+                <div class="absolute top-4 right-4 w-24 h-32 bg-black rounded-lg border border-slate-600 overflow-hidden">
+                    <video id="localVideo" autoplay playsinline muted class="w-full h-full object-cover -scale-x-100"></video>
                 </div>
-                <button onclick="toggleBreathing()" class="bg-emerald-600 hover:bg-emerald-500 text-xs md:text-sm px-3 md:px-4 py-1.5 rounded-lg transition flex items-center gap-2 font-bold">
-                    <i class="fa-solid fa-lungs"></i> تمرین تنفس
-                </button>
-            </div>
-        </header>
-
-        <div class="flex-1 flex overflow-hidden relative">
-            <!-- نوار ابزار پایین (موبایل) -->
-            <div class="w-full md:w-20 bg-slate-900 border-t md:border-t-0 md:border-r border-slate-800 flex md:flex-col justify-center items-center py-2 md:py-4 gap-2 md:gap-6 z-40 h-16 md:h-full shrink-0 order-2 md:order-2">
-                <button onclick="switchTab('video')" id="btnVideo" class="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-emerald-400 bg-slate-800 transition shadow-lg"><i class="fa-solid fa-video"></i></button>
-                <button onclick="switchTab('whiteboard')" id="btnBoard" class="w-10 h-10 md:w-12 md:h-12 rounded-xl flex items-center justify-center text-slate-400 hover:bg-slate-800 transition"><i class="fa-solid fa-chalkboard-user"></i></button>
-                <!-- دکمه یادداشت برای بیمار وجود ندارد -->
-            </div>
-
-            <div class="order-1 flex-1 relative bg-black">
-                <!-- 1. تب ویدیو -->
-                <div id="tabVideo" class="absolute inset-0 flex flex-col md:flex-row">
-                    <div class="flex-1 relative bg-slate-800 flex items-center justify-center">
-                        <video id="remoteVideo" autoplay playsinline class="w-full h-full object-contain"></video>
-                        <div id="noVideoPlaceholder" class="absolute text-slate-500 flex flex-col items-center animate-pulse">
-                            <i class="fa-solid fa-user text-4xl mb-2 opacity-50"></i>
-                            <span>در حال اتصال به دکتر...</span>
+                <!-- ابزارهای بیمار (فقط روی تب ویدیو) -->
+                <div id="patientTools" class="absolute bottom-4 left-4 right-4 bg-slate-800/90 backdrop-blur p-3 rounded-xl border border-slate-700 transition-all duration-300">
+                    <div class="space-y-3">
+                        <!-- نوار استرس (SUDS) -->
+                        <div>
+                            <div class="flex justify-between text-xs text-slate-300 mb-1">
+                                <span>میزان استرس شما</span>
+                                <span id="sudsValue">5</span>
+                            </div>
+                            <input type="range" min="0" max="10" value="5" class="w-full accent-emerald-500" oninput="updateSuds(this.value)">
                         </div>
-                        <div class="absolute bottom-24 md:bottom-6 right-4 md:right-6 w-32 h-48 bg-black rounded-xl overflow-hidden border-2 border-slate-600 shadow-2xl z-20">
-                            <video id="localVideo" autoplay playsinline muted class="w-full h-full object-cover transform -scale-x-100"></video>
+                        <!-- انتخاب حس -->
+                        <div class="flex justify-between text-lg">
+                            <button class="emotion-btn" onclick="sendEmotion('😐')">😐</button>
+                            <button class="emotion-btn" onclick="sendEmotion('😢')">😢</button>
+                            <button class="emotion-btn" onclick="sendEmotion('😠')">😠</button>
+                            <button class="emotion-btn" onclick="sendEmotion('😨')">😨</button>
+                            <button class="emotion-btn" onclick="sendEmotion('😊')">😊</button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 2. تب تخته -->
-                <div id="tabWhiteboard" class="hidden absolute inset-0 bg-white flex flex-col">
-                    <div class="h-14 bg-slate-100 hidden md:flex items-center px-4 justify-between border-b">
-                        <div class="flex gap-3" id="colorPalette">
-                            <div class="color-btn bg-black active" onclick="setColor('black', this)"></div>
-                            <div class="color-btn bg-red-500" onclick="setColor('#ef4444', this)"></div>
-                            <div class="color-btn bg-blue-500" onclick="setColor('#3b82f6', this)"></div>
-                        </div>
-                    </div>
-                    <div class="md:hidden absolute bottom-4 right-4 bg-white p-2 rounded-xl shadow-xl border flex gap-3 z-30">
-                        <div class="color-btn bg-black active w-8 h-8" onclick="setColor('black', this)"></div>
-                        <div class="color-btn bg-red-500 w-8 h-8" onclick="setColor('#ef4444', this)"></div>
-                        <div class="color-btn bg-blue-500 w-8 h-8" onclick="setColor('#3b82f6', this)"></div>
-                    </div>
-                    <canvas id="whiteboard" class="w-full h-full block cursor-crosshair"></canvas>
-                </div>
-
-                <div id="breathOverlay" class="breath-circle flex items-center justify-center">
-                    <span class="text-emerald-800/30 text-2xl font-bold tracking-widest">دم ... بازدم</span>
+            <!-- تخته (زیر نظر دکتر باز می‌شود) -->
+            <div id="tabWhiteboard" class="hidden absolute inset-0 bg-white">
+                <canvas id="whiteboard" class="w-full h-full"></canvas>
+                <!-- رنگ‌های ساده برای مراجع اگر بخواهد بنویسد -->
+                <div class="absolute bottom-4 right-4 bg-white shadow-lg p-2 rounded-full flex gap-2 border">
+                    <div class="w-8 h-8 rounded-full bg-black cursor-pointer" onclick="setColor('black')"></div>
+                    <div class="w-8 h-8 rounded-full bg-red-500 cursor-pointer" onclick="setColor('#ef4444')"></div>
+                    <div class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer" onclick="setColor('#3b82f6')"></div>
                 </div>
             </div>
+
+            <!-- انیمیشن تنفس (وسط صفحه) -->
+            <div id="breathOverlay" class="breath-circle flex items-center justify-center">
+                <div class="text-center">
+                    <span class="text-white text-3xl font-bold animate-pulse block">دم و بازدم</span>
+                    <span class="text-emerald-400 text-sm block mt-2">با سرعت دایره نفس بکشید</span>
+                </div>
+            </div>
+
         </div>
 
-        <div class="h-20 bg-slate-900 border-t border-slate-800 flex justify-center items-center gap-4 md:gap-8 z-40 pb-2">
-            <button onclick="toggleAudio()" id="btnMic" class="w-14 h-14 rounded-full bg-slate-700 text-white hover:bg-slate-600 transition shadow-xl flex items-center justify-center text-xl"><i class="fa-solid fa-microphone"></i></button>
-            <button onclick="endCall()" class="w-16 h-16 rounded-full bg-red-600 text-white hover:bg-red-500 shadow-xl shadow-red-900/40 transition flex items-center justify-center text-2xl border-4 border-slate-900"><i class="fa-solid fa-phone-slash"></i></button>
-            <button onclick="toggleVideo()" id="btnCam" class="w-14 h-14 rounded-full bg-slate-700 text-white hover:bg-slate-600 transition shadow-xl flex items-center justify-center text-xl"><i class="fa-solid fa-video"></i></button>
+        <!-- کنترل‌های پایین -->
+        <div class="h-20 bg-slate-900 flex justify-center items-center gap-6 pb-2 border-t border-slate-800 z-20">
+            <button onclick="toggleAudio()" id="btnMic" class="w-14 h-14 rounded-full bg-slate-700 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-microphone"></i></button>
+            <button onclick="endCall()" class="w-16 h-16 rounded-full bg-red-600 text-white flex items-center justify-center text-2xl"><i class="fa-solid fa-phone-slash"></i></button>
+            <button onclick="toggleVideo()" id="btnCam" class="w-14 h-14 rounded-full bg-slate-700 text-white flex items-center justify-center text-xl"><i class="fa-solid fa-video"></i></button>
         </div>
     </div>
 
     <script>
-        let peer = null; let conn = null; let call = null; let localStream = null; let role = 'patient';
-        let canvas = document.getElementById('whiteboard'); let ctx = canvas.getContext('2d');
-        let isDrawing = false; let lastX = 0, lastY = 0; let currentColor = 'black';
+        let peer = null, conn = null, call = null, localStream = null;
+        let canvas = document.getElementById('whiteboard'), ctx = canvas.getContext('2d');
+        let isDrawing = false, lastX = 0, lastY = 0, currentColor = 'black';
 
-        // --- منطق بیمار ---
         function patientSubmit() {
-            const name = document.getElementById('pName').value || 'ناشناس';
-            const reason = document.getElementById('pReason').value || 'عمومی';
+            const name = document.getElementById('pName').value;
             const docId = prompt("کد جلسه دکتر را وارد کنید:");
-
             if(!docId) return location.reload();
-
-            document.getElementById('intakeForm').innerHTML = '<div class="text-emerald-600 flex flex-col items-center"><i class="fa-solid fa-circle-notch fa-spin text-5xl mb-4"></i><p class="text-lg font-bold">در حال اتصال به دکتر...</p></div>';
-
-            initCamera();
-            peer = new Peer();
-
-            peer.on('open', (id) => {
-                conn = peer.connect(docId);
-                conn.on('open', () => {
-                    conn.send({ type: 'intake', name: name, reason: reason });
-                    call = peer.call(docId, localStream);
-                    handleCall(call);
+            
+            document.getElementById('intakeForm').innerHTML = '<div class="text-emerald-500 text-xl animate-pulse">در حال اتصال...</div>';
+            
+            initCamera().then(() => {
+                peer = new Peer();
+                peer.on('open', () => {
+                    conn = peer.connect(docId);
+                    conn.on('open', () => {
+                        conn.send({ type: 'intake', name: name || 'بیمار' });
+                        call = peer.call(docId, localStream);
+                        handleCall(call);
+                    });
                 });
+                peer.on('error', () => alert("خطا در اتصال"));
             });
-            peer.on('error', (err) => { alert("خطا: " + err.type); location.reload(); });
         }
 
-        async function initCamera() {
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                document.getElementById('localVideo').srcObject = localStream;
-            } catch(e) { alert("دسترسی دوربین رد شد"); }
+        function handleData(data) {
+            if (data.type === 'draw') drawRemote(data);
+            else if (data.type === 'cmd') executeCmd(data.action);
         }
 
         function handleCall(c) {
             call = c;
             document.getElementById('intakeForm').classList.add('hidden');
             document.getElementById('mainSession').classList.remove('hidden');
-            const remoteVid = document.getElementById('remoteVideo');
-            c.on('stream', (s) => {
-                remoteVid.srcObject = s;
-                document.getElementById('noVideoPlaceholder').style.display = 'none';
-            });
+            c.on('stream', s => document.getElementById('remoteVideo').srcObject = s);
             c.on('close', () => location.reload());
-            resizeCanvas();
-            window.addEventListener('resize', resizeCanvas);
-            startTimer();
+            resizeCanvas(); window.addEventListener('resize', resizeCanvas);
         }
 
-        function switchTab(tabName) {
+        function executeCmd(action) {
+            // مخفی کردن همه
             document.getElementById('tabVideo').classList.add('hidden');
             document.getElementById('tabWhiteboard').classList.add('hidden');
-            ['Video', 'Board'].forEach(t => { // Notes removed from loop
-                const btn = document.getElementById('btn' + t);
-                btn.classList.remove('text-emerald-400', 'bg-slate-800');
-                btn.classList.add('text-slate-400');
-            });
-            document.getElementById('tab' + tabName.charAt(0).toUpperCase() + tabName.slice(1)).classList.remove('hidden');
-            const targetBtn = document.getElementById('btn' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
-            targetBtn.classList.remove('text-slate-400');
-            targetBtn.classList.add('text-emerald-400', 'bg-slate-800');
-            if(tabName === 'whiteboard') setTimeout(resizeCanvas, 50);
+            document.getElementById('breathOverlay').style.display = 'none';
+
+            // نمایش انتخاب شده
+            if(action === 'video') document.getElementById('tabVideo').classList.remove('hidden');
+            if(action === 'whiteboard') document.getElementById('tabWhiteboard').classList.remove('hidden');
+            if(action === 'breath') document.getElementById('breathOverlay').style.display = 'flex';
         }
 
-        function resizeCanvas() { const parent = canvas.parentElement; canvas.width = parent.clientWidth; canvas.height = parent.clientHeight; }
-        function getPos(e) { const rect = canvas.getBoundingClientRect(); const x = (e.clientX || e.touches[0].clientX) - rect.left; const y = (e.clientY || e.touches[0].clientY) - rect.top; return {x, y}; }
-        function startDraw(e) { isDrawing = true; const pos = getPos(e); lastX = pos.x; lastY = pos.y; }
-        function moveDraw(e) { if (!isDrawing) return; e.preventDefault(); const pos = getPos(e); drawOnCanvas(lastX, lastY, pos.x, pos.y, currentColor, true); lastX = pos.x; lastY = pos.y; }
-        function endDraw() { isDrawing = false; }
-        function drawOnCanvas(x0, y0, x1, y1, color, isLocal) {
-            ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.strokeStyle = color; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
-            if (isLocal && conn && conn.open) { conn.send({ type: 'draw', x0, y0, x1, y1, color: color }); }
+        // --- ابزارهای بیمار ---
+        function updateSuds(val) {
+            document.getElementById('sudsValue').innerText = val;
+            if(conn && conn.open) conn.send({ type: 'suds', val: val });
         }
-        canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', moveDraw); canvas.addEventListener('mouseup', endDraw);
+        function sendEmotion(emoji) {
+            if(conn && conn.open) conn.send({ type: 'emotion', val: emoji });
+        }
+
+        // --- Canvas ---
+        function resizeCanvas() { const p = canvas.parentElement; canvas.width = p.clientWidth; canvas.height = p.clientHeight; }
+        function getPos(e) { const r = canvas.getBoundingClientRect(); return { x: e.touches[0].clientX - r.left, y: e.touches[0].clientY - r.top }; }
+        function startDraw(e) { isDrawing = true; const p = getPos(e); lastX = p.x; lastY = p.y; }
+        function moveDraw(e) { if(!isDrawing) return; e.preventDefault(); const p = getPos(e); draw(lastX, lastY, p.x, p.y, true); lastX = p.x; lastY = p.y; }
+        function endDraw() { isDrawing = false; }
+        function draw(x0, y0, x1, y1, isLocal) {
+            ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.strokeStyle = currentColor; ctx.lineWidth = 4; ctx.lineCap = 'round'; ctx.stroke();
+            if(isLocal && conn && conn.open) conn.send({ type: 'draw', x0, y0, x1, y1, color: currentColor });
+        }
+        function drawRemote(d) { draw(d.x0, d.y0, d.x1, d.y1, false); }
+        function setColor(c) { currentColor = c; }
         canvas.addEventListener('touchstart', startDraw); canvas.addEventListener('touchmove', moveDraw); canvas.addEventListener('touchend', endDraw);
 
-        function setColor(color, btn) { currentColor = color; document.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
-        function toggleBreathing() { const el = document.getElementById('breathOverlay'); el.style.display = el.style.display === 'block' ? 'none' : 'block'; }
+        async function initCamera() {
+            try { localStream = await navigator.mediaDevices.getUserMedia({video:true,audio:true}); document.getElementById('localVideo').srcObject = localStream; } catch(e){}
+        }
         function toggleAudio() { localStream.getAudioTracks()[0].enabled = !localStream.getAudioTracks()[0].enabled; document.getElementById('btnMic').innerHTML = localStream.getAudioTracks()[0].enabled ? '<i class="fa-solid fa-microphone"></i>' : '<i class="fa-solid fa-microphone-slash text-red-500"></i>'; }
         function toggleVideo() { localStream.getVideoTracks()[0].enabled = !localStream.getVideoTracks()[0].enabled; document.getElementById('btnCam').innerHTML = localStream.getVideoTracks()[0].enabled ? '<i class="fa-solid fa-video"></i>' : '<i class="fa-solid fa-video-slash text-red-500"></i>'; }
         function endCall() { if(confirm("قطع تماس؟")) { if(call) call.close(); location.reload(); } }
-        function startTimer() { let sec = 0; setInterval(() => { sec++; const m = Math.floor(sec / 60).toString().padStart(2, '0'); const s = (sec % 60).toString().padStart(2, '0'); document.getElementById('sessionTimer').innerText = `${m}:${s}`; }, 1000); }
     </script>
 </body>
 </html>
